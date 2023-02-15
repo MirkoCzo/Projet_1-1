@@ -12,12 +12,45 @@ import java.util.Objects;
  *
  */
 public class SessionCours {
+    /**
+     * Identifiant unique de la session du cours attribué par la base de données
+     */
     private int id_sessionCours;
-    private Date dateDebut,dateFin;
+    /**
+     * Date du debut de la session du cours
+     */
+    private Date dateDebut;
+    /**
+     * Date de fin de la session du cours
+     */
+
+    private Date dateFin;
+    /**
+     * Nombre d'inscrit pour une session de cours
+     */
     private int nbreInscrits;
+    /**
+     * Cours pour la session de cours
+     */
     private Cours cours;
+    /**
+     * Local pour la session de cours
+     */
     private Local local;
+    /**
+     * Liste de toutes les infos lié à ce cours @see Infos
+     */
     private List<Infos> infosList = new ArrayList<>();
+
+    /**
+     * Constructeur paramétré
+     * @param id id de la session du cours
+     * @param dateDebut date de debut de la session du cours
+     * @param dateFin date de fin de la session du cours
+     * @param nbreInscrits nombre d'inscrit pour la session du cours
+     * @param cours cours pour la session
+     * @param local local pour la session
+     */
     public SessionCours(int id,Date dateDebut,Date dateFin,int nbreInscrits,Cours cours,Local local)
     {
         this.id_sessionCours=id;
@@ -28,61 +61,135 @@ public class SessionCours {
         this.local=local;
     }
 
+    /**
+     * Getter Id
+     * @return id de la session
+     */
     public int getId_sessionCours() {
         return id_sessionCours;
     }
+
+    /**
+     * Setter Id de session
+     * @param id_sessionCours id de la session
+     */
 
     public void setId_sessionCours(int id_sessionCours) {
         this.id_sessionCours = id_sessionCours;
     }
 
+    /**
+     * Getter Date de debut
+     * @return date de debut de la session
+     */
+
     public Date getDateDebut() {
         return dateDebut;
     }
+
+    /**
+     * Setter Date de debut
+     * @param dateDebut date de debut de la session
+     */
 
     public void setDateDebut(Date dateDebut) {
         this.dateDebut = dateDebut;
     }
 
+    /**
+     * Getter date de fin
+     * @return date de fin de la session
+     */
+
     public Date getDateFin() {
         return dateFin;
     }
+
+    /**
+     * Setter date de fin
+     * @param dateFin date de fin de la session
+     */
 
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
     }
 
+    /**
+     * Getter Nombre d'inscrit
+     * @return Nombre d'inscrit de la session
+     */
+
     public int getNbreInscrits() {
         return nbreInscrits;
     }
+
+    /**
+     * Setter nombre d'inscrit
+     * @param nbreInscrits nombre d'inscrit de la session
+     */
 
     public void setNbreInscrits(int nbreInscrits) {
         this.nbreInscrits = nbreInscrits;
     }
 
+    /**
+     * Getter Cours
+     * @return cours de la session
+     */
+
     public Cours getCours() {
         return cours;
     }
+
+    /**
+     * Setter Cours
+     * @param cours cours de la session
+     */
 
     public void setCours(Cours cours) {
         this.cours = cours;
     }
 
+    /**
+     * Getter Local
+     * @return Local du cours
+     */
+
     public Local getLocal() {
         return local;
     }
+
+    /**
+     * Setter Local
+     * @param local Local du cours
+     */
 
     public void setLocal(Local local) {
         this.local = local;
     }
 
+    /**
+     * Getter Infos
+     * @return liste des infos du cours @see infos
+     */
+
     public List<Infos> getInfosList() {
         return infosList;
     }
 
+    /**
+     * Setter Infos
+     * @param infosList liste des infos du cours
+     */
     public void setInfosList(List<Infos> infosList) {
         this.infosList = infosList;
     }
+
+    /**
+     * égalité entre deux sessions de cours basé sur l'ID de la session
+     * @param o autre paramètre
+     * @return égalité ou non
+     */
 
     @Override
     public boolean equals(Object o) {
@@ -91,6 +198,11 @@ public class SessionCours {
         SessionCours that = (SessionCours) o;
         return id_sessionCours == that.id_sessionCours;
     }
+
+    /**
+     * Calcul du hashcode basé sur l'id de la session du cours
+     * @return hashcode de la session du cours
+     */
 
     @Override
     public int hashCode() {
