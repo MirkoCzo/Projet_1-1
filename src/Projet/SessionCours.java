@@ -1,7 +1,7 @@
 package Projet;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +19,12 @@ public class SessionCours {
     /**
      * Date du debut de la session du cours
      */
-    private Date dateDebut;
+    private LocalDate dateDebut;
     /**
      * Date de fin de la session du cours
      */
 
-    private Date dateFin;
+    private LocalDate dateFin;
     /**
      * Nombre d'inscrit pour une session de cours
      */
@@ -41,6 +41,23 @@ public class SessionCours {
      * Liste de toutes les infos lié à ce cours @see Infos
      */
     private List<Infos> infosList = new ArrayList<>();
+    /**
+     * méthode toString
+     *
+     * @return informations complètes sans la liste d'info
+     */
+
+    @Override
+    public String toString() {
+        return "SessionCours{" +
+                "id_sessionCours=" + id_sessionCours +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", nbreInscrits=" + nbreInscrits +
+                ", cours=" + cours +
+                ", local=" + local +
+                '}';
+    }
 
     /**
      * Constructeur paramétré
@@ -51,7 +68,7 @@ public class SessionCours {
      * @param cours cours pour la session
      * @param local local pour la session
      */
-    public SessionCours(int id,Date dateDebut,Date dateFin,int nbreInscrits,Cours cours,Local local)
+    public SessionCours(int id, LocalDate dateDebut, LocalDate dateFin, int nbreInscrits, Cours cours, Local local)
     {
         this.id_sessionCours=id;
         this.dateDebut=dateDebut;
@@ -80,10 +97,11 @@ public class SessionCours {
 
     /**
      * Getter Date de debut
+     *
      * @return date de debut de la session
      */
 
-    public Date getDateDebut() {
+    public LocalDate getDateDebut() {
         return dateDebut;
     }
 
@@ -92,16 +110,17 @@ public class SessionCours {
      * @param dateDebut date de debut de la session
      */
 
-    public void setDateDebut(Date dateDebut) {
+    public void setDateDebut(LocalDate dateDebut) {
         this.dateDebut = dateDebut;
     }
 
     /**
      * Getter date de fin
+     *
      * @return date de fin de la session
      */
 
-    public Date getDateFin() {
+    public LocalDate getDateFin() {
         return dateFin;
     }
 
@@ -110,7 +129,7 @@ public class SessionCours {
      * @param dateFin date de fin de la session
      */
 
-    public void setDateFin(Date dateFin) {
+    public void setDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
 
