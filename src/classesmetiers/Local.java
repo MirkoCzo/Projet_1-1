@@ -1,4 +1,4 @@
-package Projet;
+package classesmetiers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,6 +134,16 @@ public class Local {
      */
     public void setSessions(List<SessionCours> sessions) {
         this.sessions = sessions;
+    }
+
+    @Override
+    public String toString() {
+        return "Local{" +
+                "id_local=" + id_local +
+                ", sigle='" + sigle + '\'' +
+                ", places=" + places +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     /**

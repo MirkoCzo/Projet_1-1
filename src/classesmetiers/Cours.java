@@ -1,4 +1,4 @@
-package Projet;
+package classesmetiers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +47,15 @@ public class Cours {
         this.id_cours = id;
         this.matiere = matiere;
         this.heures = heures;
+    }
+
+    @Override
+    public String toString() {
+        return "Cours{" +
+                "id_cours=" + id_cours +
+                ", matiere='" + matiere + '\'' +
+                ", heures=" + heures +
+                "'}'";
     }
 
     /**

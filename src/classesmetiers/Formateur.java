@@ -1,4 +1,4 @@
-package Projet;
+package classesmetiers;
 
 import java.util.Objects;
 /**
@@ -59,6 +59,16 @@ public class Formateur {
         if (o == null || getClass() != o.getClass()) return false;
         Formateur formateur = (Formateur) o;
         return id_formateur == formateur.id_formateur && mail.equals(formateur.mail);
+    }
+
+    @Override
+    public String toString() {
+        return "Formateur{" +
+                "id_formateur=" + id_formateur +
+                ", mail='" + mail + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                '}';
     }
 
     /**

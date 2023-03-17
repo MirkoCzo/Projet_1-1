@@ -1,4 +1,4 @@
-package Projet;
+package classesmetiers;
 
 /**
  *   classe Infos de l'organisme de formation
