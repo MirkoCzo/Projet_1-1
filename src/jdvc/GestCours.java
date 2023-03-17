@@ -9,6 +9,7 @@ import classesmetiers.SessionCours;
 import myconnections.DBconnection;
 
 import javax.sound.midi.SysexMessage;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -57,24 +58,30 @@ public class GestCours {
             }
         }while (true);
     }
-    public void ajout()
-    {
+    public void ajout() {
         System.out.println("Nom de la matière du cours? :");
         String mat = sc.nextLine();
         System.out.println("Nombre d'heures du cours? :");
         int heures = sc.nextInt();
         sc.skip("\n");
         String query1 = "insert into APICOURS(MATIÈRE,HEURES) values (?,?)";
-        try(PreparedStatement pstm1 = dbConnect.prepareStatement(query1))
-        {
-            pstm1.setString(1,mat);
-            pstm1.setInt(2,heures);
+        String query2 = "select ID_COURS from APICOURS where rownum = 1 order by ID_COURS desc"; //Selectionne le dernier cours rentré
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
+             PreparedStatement pstm2 = dbConnect.prepareStatement(query2)) {
+            pstm1.setString(1, mat);
+            pstm1.setInt(2, heures);
             int n = pstm1.executeUpdate();
-            System.out.println(n+" ligne insérée");
+            System.out.println(n + " ligne insérée");
 
-        } catch (SQLException e)
-        {
-            System.out.println("Erreur sql : "+e);
+            // Récupération de l'ID du dernier cours créé
+            try (ResultSet rs = pstm2.executeQuery()) {
+                if (rs.next()) {
+                    int idCours = rs.getInt("ID_COURS");
+                    System.out.println("Nouveau cours créé avec l'ID : " + idCours);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur sql : " + e);
         }
     }
     public void recherche()
@@ -306,6 +313,7 @@ public class GestCours {
             {
                 case 1:
                     System.out.println("Nouveau nom de cours ");
+                    sc.skip("\n");
                     String nom=sc.nextLine();
                     String query = "update APICOURS set MATIÈRE=? where ID_COURS = ?";
                     try(PreparedStatement pstm = dbConnect.prepareStatement(query))
@@ -346,12 +354,15 @@ public class GestCours {
     {
         System.out.println("Id du cours à supprimer ");
         int id = sc.nextInt();
-        String query = "delete from APICOURS where idclient = ?";
+        String query = "delete from APICOURS where id_cours = ?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(query))
         {
             pstm.setInt(1,id);
             int n = pstm.executeUpdate();
-            if(n!=0) System.out.println(n+"ligne supprimée");
+            if(n!=0) {
+                System.out.println(n + " ligne supprimée");
+                dbConnect.commit(); //J'ai ajouté ça car avant la ligne entière ne se supprimait pas mais ajoutait NULL dans la colonne matière
+            }                       //Maintenant, la ligne entière se supprime mais me met une erreur sql
             else System.out.println("Record introuvable");
         }catch (SQLException e)
         {
