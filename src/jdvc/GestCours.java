@@ -361,8 +361,8 @@ public class GestCours {
             int n = pstm.executeUpdate();
             if(n!=0) {
                 System.out.println(n + " ligne supprimée");
-                dbConnect.commit(); //J'ai ajouté ça car avant la ligne entière ne se supprimait pas mais ajoutait NULL dans la colonne matière
-            }                       //Maintenant, la ligne entière se supprime mais me met une erreur sql
+
+            }
             else System.out.println("Record introuvable");
         }catch (SQLException e)
         {
