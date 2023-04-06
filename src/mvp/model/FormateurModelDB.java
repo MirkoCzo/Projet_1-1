@@ -31,7 +31,45 @@ public class FormateurModelDB implements DAOFormateur {
     @Override
     public Formateur addFormateur(Formateur formateur)
     {
-        String query1 = "insert into APIFORMATEUR(ID_FORMATEUR,MAIL,NOM,PRENOM) values(?,?,?,?)";
+        String query1 = "insert into APIFORMATEUR(MAIL,NOM,PRENOM) values(?,?,?)";
         String query2 =  "select ID_FORMATEUR from APIFORMATEUR where mail = ?";
+        try(PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
+            PreparedStatement pstm2 = dbConnect.prepareStatement(query2);
+        ){
+            pstm1.setString(1,formateur.getMail());
+            pstm1.setString(2,formateur.getNom());
+            pstm1.setString(3,formateur.getPrenom());
+            int n = pstm1.executeUpdate();
+            if(n==1)
+            {
+                pstm2.setString(1,formateur.getMail());
+                ResultSet rs = pstm2.executeQuery();
+                if(rs.next())
+                {
+                    int idform = rs.getInt(1);
+                    formateur.setId_formateur(idform);
+                    return formateur;
+                }
+                else {
+                    logger.error("Record introuvable");
+                    return null;
+                }
+            }
+            else return null;
+        }catch (SQLException e )
+        {
+            logger.error("Erreur sql : "+e);
+            return null;
+        }
+
+    }
+    @Override
+    public boolean removeFormateur(Formateur formateur)
+    {
+        String query = "delete from APICOURS where ID_FORMATEUR = ?";
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query))
+        {
+
+        }
     }
 }
