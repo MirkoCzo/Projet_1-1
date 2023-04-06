@@ -5,10 +5,9 @@ import myconnections.DBconnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CoursModelDB implements DAOCours {
     private static final Logger logger = LogManager.getLogger(CoursModelDB.class);
@@ -92,6 +91,60 @@ public class CoursModelDB implements DAOCours {
             int n = pstm.executeUpdate();
             if(n!=0) return readCours(cours.getId());
             else return null;
+        }
+        catch (SQLException e)
+        {
+            logger.error("Erreur d'update : "+e);
+            return null;
+        }
+    }
+
+    @Override
+    public Cours readCours(int idCours)
+    {
+        String query = "select * from APICOURS where id_cours = ?";
+        try(PreparedStatement pstm = dbConnect.prepareStatement(query))
+        {
+            pstm.setInt(1,idCours);
+            ResultSet rs=pstm.executeQuery();
+            if(rs.next())
+            {
+                String matière = rs.getString(2);
+                int heures = rs.getInt(3);
+                Cours c = new Cours(idCours,matière,heures);
+                return c;
+            }
+            else return null;
+        }
+        catch(SQLException e)
+        {
+            logger.error("Erreur sql : "+e);
+            return null;
+        }
+    }
+
+    @Override
+    public List<Cours> getCours()
+    {
+        List<Cours> lcours = new ArrayList<>();
+        String query="select * from APICOURS";
+        try(Statement stm = dbConnect.createStatement())
+        {
+            ResultSet rs = stm.executeQuery((query));
+            while(rs.next())
+            {
+                int idcours = rs.getInt(1);
+                String mat = rs.getString(2);
+                int heures = rs.getInt(3);
+                Cours c = new Cours(idcours,mat,heures);
+                lcours.add(c);
+            }
+            return lcours
+        }
+        catch(SQLException e)
+        {
+            logger.error("Erreur SQL : "+e);
+            return null;
         }
     }
 
