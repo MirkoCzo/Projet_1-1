@@ -139,7 +139,7 @@ public class CoursModelDB implements DAOCours {
                 Cours c = new Cours(idcours,mat,heures);
                 lcours.add(c);
             }
-            return lcours
+            return lcours;
         }
         catch(SQLException e)
         {
