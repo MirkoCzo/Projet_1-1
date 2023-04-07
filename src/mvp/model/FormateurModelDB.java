@@ -106,7 +106,7 @@ public class FormateurModelDB implements DAOFormateur {
         String query = "select * from APIFORMATEUR where ID_FORMATEUR = ?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(query))
         {
-            pstm.setString(1,idFormateur);
+            pstm.setInt(1,idFormateur);
             ResultSet rs = pstm.executeQuery();
             if(rs.next())
             {

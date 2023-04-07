@@ -14,5 +14,5 @@ public interface DAOFormateur {
 
     Formateur readFormateur(int idForm);
 
-    List<Formateur> getFormateur();
+    List<Formateur> getFormateurs();
 }
