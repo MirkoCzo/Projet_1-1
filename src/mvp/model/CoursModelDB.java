@@ -4,7 +4,6 @@ import classesmetiers.Cours;
 import myconnections.DBconnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import myconnections.DBconnection;
 
 import java.sql.*;
 import java.util.ArrayList;
