@@ -12,7 +12,7 @@ public interface DAOSessionCours {
 
     SessionCours updateSessionCours(SessionCours sc);
 
-    SessionCours readLocal(int idSe);
+    SessionCours readSessionCours(int idSe);
 
     List<SessionCours> getSessionCours();
 }
