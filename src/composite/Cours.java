@@ -1,17 +1,9 @@
-package classesmetiers;
+package composite;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Objects;
-/**
- *   classe cours de l'organisme de formation
- *   @author Mirko Cuozzo
- *   @version 1.0
- *   @see SessionCours
- */
 
-public class Cours {
-
+public class Cours extends Element{
     /**
      * Identifiant unique de l'ID du cours attribué par la base de données
      */
@@ -27,7 +19,6 @@ public class Cours {
     /**
      * Liste de toutes les sessions de cours qu'il y a eu
      */
-    private List<SessionCours> sessions = new ArrayList<>();
 
     /**
      * Constructeur par défaut
@@ -119,9 +110,7 @@ public class Cours {
      * @return Nombre d'heures du cours
      */
 
-    public int getHeures() {
-        return heures;
-    }
+
 
     /**
      * Setter Heures
@@ -136,16 +125,20 @@ public class Cours {
      * @return liste de toutes les sessions
      */
 
-    public List<SessionCours> getSessions() {
-        return sessions;
+
+
+    @Override
+    public void afficher()
+    {
+        System.out.println("Cours id = "+id_cours+"matieres (nom) = "+matiere+" heures = "+heures);
     }
 
-    /**
-     * setter Sessions
-     * @param sessions liste de toutes les sessions
-     */
-
-    public void setSessions(List<SessionCours> sessions) {
-        this.sessions = sessions;
+    @Override
+    public int getHeures() {
+        return heures;
     }
+
+
+
+
 }

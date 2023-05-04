@@ -46,7 +46,7 @@ public class Cours {
      */
 
     private Cours(CoursBuilder cb) {
-        this.id_cours = cb.idcours;
+        this.id_cours = cb.id_cours;
         this.matiere = cb.matiere;
         this.heures = cb.heures;
     }
