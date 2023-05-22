@@ -1,4 +1,4 @@
-package builder;
+package designpatterns.builder;
 
 import classesmetiers.Infos;
 import classesmetiers.Local;

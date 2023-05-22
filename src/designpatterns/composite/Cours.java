@@ -1,4 +1,4 @@
-package composite;
+package designpatterns.composite;
 
 
 import java.util.Objects;

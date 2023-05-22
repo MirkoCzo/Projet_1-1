@@ -1,4 +1,4 @@
-package composite;
+package designpatterns.composite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,7 @@ public class Categorie extends Element{
     @Override
     public void afficher()
     {
-        int totalHeures = 0;
-        for (Element e : elementList)
-        {
-            totalHeures=totalHeures+e.getHeures();
-        }
+        getHeures();
 
         System.out.println("Catégorie id = "+id+" nom = "+nom+" heures = "+heures);
         for (Element e : elementList)
@@ -44,10 +40,10 @@ public class Categorie extends Element{
 
     @Override
     public int getHeures() {
-        int totalHeures = 0;
+        heures = 0;
         for (Element element : elementList) {
-            totalHeures += element.getHeures();
+            heures += element.getHeures();
         }
-        return totalHeures;
+        return heures;
     }
 }
