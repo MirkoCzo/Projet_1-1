@@ -5,106 +5,76 @@ import static Utilitaires.Utilitaires.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-public class CoursViewConsole implements CoursViewInterface{
+import mvp.model.CoursModelDB;
+import mvp.presenter.Presenter;
 
-    private CoursPresenter presenter;
+public class CoursViewConsole extends View<Cours>{
 
-    private List<Cours> lc;
-
-    private Scanner sc = new Scanner(System.in);
-
-    public CoursViewConsole()
+    @Override
+    protected void rechercher()
     {
 
+        try
+        {
+            System.out.println("Id du cours ? :");
+            int id = lireInt();
+            Cours rech = new Cours(id,"x",0);
+            presenter.search(rech);
+
+        }catch (Exception e)
+        {
+            System.out.println("erreur : "+e);
+        }
     }
 
     @Override
-    public void setPresenter(CoursPresenter presenter)
+    protected void modifier()
     {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void setListDatas(List<Cours> cours)
-    {
-        this.lc = cours;
-        affListe(lc);
-        menu();
-    }
-    @Override
-    public void affMsg(String msg)
-    {
-        System.out.println("Information : "+msg);
-    }
-    @Override
-    public void affList(List infos)
-    {
-        affListe(infos);
-    }
-    public void menu() {
-        do {
-
-            int ch = choixListe(Arrays.asList("ajout", "retrait", "rechercher", "modifier", "fin"));
-            switch (ch) {
-                case 1:
-                    ajouter();
-                    break;
-                case 2:
-                    retirer();
-                    break;
-                case 3:
-                    rechercher();
-                    break;
-                case 4:
-                    modifier();
-                    break;
-                case 5:
-                    return;
+        int choix = choixElt(ldatas);
+        Cours c = ldatas.get(choix-1);
+        do
+        {
+            try
+            {
+                String mat = modifyIfNotBlank("Matière ",c.getMatiere());
+                int heures = Integer.parseInt(modifyIfNotBlank("Heures", String.valueOf(c.getHeures())));
+                c.setMatiere(mat);
+                c.setHeures(heures);
+                break;
+            }catch (Exception e)
+            {
+                System.out.println("erreur :"+e);
             }
-        } while (true);
-    }
-    private void modifier()
-    {
-        int nl = choixElt(lc) -1;
 
-        Cours cours = lc.get(nl);
-        String matieres = modifyIfNotBlank("Matiere",cours.getMatiere());
-        int heures = Integer.parseInt(modifyIfNotBlank("heures", String.valueOf(cours.getHeures())));
-        presenter.update(new Cours(cours.getId(),matieres,heures));
-
+        }while(true);
+        presenter.update(c);
+        ldatas=presenter.getAll();
+        affListe(ldatas);
     }
 
-    private void ajouter()
-    {
-        System.out.println("matière : ");
-        String mat = sc.nextLine();
-        System.out.println("heures : ");
-        int heures = sc.nextInt();
-        presenter.addCours(new Cours(0,mat,heures));
-        lc = presenter.getAll();
-        affListe(lc);
-    }
     @Override
-    public Cours selectionner(List<Cours> lc)
+    protected void ajouter()
     {
-        int nl=choixListe(lc);
-        Cours cours = lc.get(nl-1);
-        return cours;
-    }
-    private void retirer()
-    {
-        int nl = choixElt(lc)-1;
-        Cours cours = lc.get(nl);
-        presenter.removeCours(cours);
-        lc = presenter.getAll();
-        affListe(lc);
-    }
+        do
+        {
+            System.out.println("Nom de la matière ? :");
+            String mat = sc.nextLine();
+            System.out.println("Nombres d'heures?");
+            int heures = sc.nextInt();
+            Cours c = null;
+            try
+            {
+                c = new Cours(0,mat,heures);
+                presenter.add(c);
+                break;
 
-    private void rechercher()
-    {
-        System.out.println("idcours : ");
-        int idCours = sc.nextInt();
-        presenter.search(idCours);
+            }catch (Exception e)
+            {
+                System.out.println("une erreur est survenue :"+e.getMessage());
+            }
+        }while (true);
+        ldatas=presenter.getAll();
+        affListe(ldatas);
     }
 
 }

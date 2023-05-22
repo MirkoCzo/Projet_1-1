@@ -17,4 +17,30 @@ public abstract class Model<T> implements DAO<T>{
             return elt;
         } else return null;
     }
+    @Override
+    public boolean remove(T elt) {
+        return ldatas.remove(elt);
+    }
+
+    @Override
+    public T update(T elt) {
+        int p = ldatas.indexOf(elt);
+        if (p < 0) return null;
+        ldatas.set(p, elt);
+        return elt;
+    }
+
+    @Override
+    public T read(T rech) {
+        int p = ldatas.indexOf(rech);
+        if(p<0) return null;
+        return ldatas.get(p);
+    }
+
+    @Override
+    public List<T> getAll() {
+        return ldatas;
+    }
+
+
 }

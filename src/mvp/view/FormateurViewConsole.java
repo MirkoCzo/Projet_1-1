@@ -9,116 +9,83 @@ import java.util.Scanner;
 
 import static Utilitaires.Utilitaires.*;
 
-public class FormateurViewConsole implements FormateurViewInterface{
-    private FormateurPresenter presenter;
-
-    private List<Formateur> lf;
-
-    private Scanner sc = new Scanner(System.in);
-
-    public FormateurViewConsole()
-    {
-
-    }
-
+public class FormateurViewConsole extends View<Formateur>{
     @Override
-    public void setPresenter(FormateurPresenter presenter)
+    protected void rechercher()
     {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void setListDatas(List<Formateur> formateurs)
-    {
-        this.lf = formateurs;
-        affList(lf);
-        menu();
-    }
-    @Override
-    public void affMsg(String msg)
-    {
-        System.out.println("Information : "+msg);
-    }
-    @Override
-    public void affList(List infos)
-    {
-        affList(infos);
-    }
-
-    public void menu()
-    {
-        int choix = choixListe(Arrays.asList("ajout","retirer","rechercher","modifier","fin"));
-        switch (choix)
+        try
         {
-            case 1:
-                ajouter();
-                break;
-            case 2:
-                retirer();
-                break;
-            case 3:
-                rechercher();
-                break;
-            case 4:
-                modifier();
-                break;
-            case 5:
-                return;
-        }while(true);
+            System.out.println("id du formateur :");
+            int id = lireInt();
+            Formateur rech = new Formateur(id,"x","x","x");
+            presenter.search(rech);
+        }catch (Exception e)
+        {
+            System.out.println("Erreur : "+e);
+        }
     }
-
-    private void ajouter()
+    @Override
+    protected void modifier()
     {
-        System.out.println("Nom : ");
-        String nom = sc.nextLine();
-        System.out.println("Prenom : ");
-        String prenom = sc.nextLine();
-        System.out.println("Mail : ");
-        String mail = sc.nextLine();
-        presenter.addFormateur(new Formateur(0,mail,nom,prenom));
-        lf = presenter.getAll();
-        affList(lf);
-    }
-    private void retirer()
-    {
-        int nl = choixElt(lf)-1;
-        Formateur formateur = lf.get(nl);
-        presenter.removeFormateur(formateur);
-        lf = presenter.getAll();
-        affList(lf);
-    }
-    private void rechercher()
-    {
-        int idFormateur = -1;
-        do {
-            try {
-                System.out.println("Id Formateur : ");
-                String ids = sc.nextLine();
-                idFormateur = Integer.parseInt(ids);
-                presenter.search(idFormateur);
-                break;
-            }catch(Exception e)
+        int choix = choixElt(ldatas);
+        Formateur f = ldatas.get(choix-1);
+        do
+        {
+            try
             {
-                System.out.println("Vous devez entrer un nombre entier");
+              String mail = modifyIfNotBlank("Mail",f.getMail());
+              String nom = modifyIfNotBlank("Nom",f.getNom());
+              String prenom = modifyIfNotBlank("Prenom",f.getPrenom());
+              f.setMail(mail);
+              f.setNom(nom);
+              f.setPrenom(prenom);
+              break;
+            }catch (Exception e)
+            {
+                System.out.println("Erreur :"+e);
             }
-        }while(true);
+        }while (true);
+        presenter.update(f);
+        ldatas=presenter.getAll();
+        affListe(ldatas);
+    }
+    @Override
+    protected  void retirer() {
+        int choix = choixElt(ldatas);
+        Formateur formateur = ldatas.get(choix-1);
+        presenter.remove(formateur);
+        ldatas=presenter.getAll();//rafraichissement
+        affListe(ldatas);
+    }
 
-    }
-    private void modifier()
+    @Override
+    protected void ajouter()
     {
-        int nl = choixElt(lf)-1;
-        Formateur formateur = lf.get(nl);
-        String mail = modifyIfNotBlank("mail",formateur.getMail());
-        String nom = modifyIfNotBlank("nom",formateur.getNom());
-        String prenom = modifyIfNotBlank("prenom",formateur.getPrenom());
-        presenter.update(new Formateur(formateur.getId_formateur(),mail,nom,prenom));
-        lf = presenter.getAll();
-        affList(lf);
+        do
+        {
+            System.out.println("Mail :");
+            String mail = sc.nextLine();
+            System.out.println("Nom :");
+            String nom = sc.nextLine();
+            System.out.println("Prenom :");
+            String prenom = sc.nextLine();
+            Formateur f = null;
+            try
+            {
+                f = new Formateur(0,mail,nom,prenom);
+                presenter.add(f);
+                break;
+            }catch (Exception e)
+            {
+                System.out.println("Erreur :"+e);
+            }
+
+
+        }while (true);
+        ldatas=presenter.getAll();
+        affListe(ldatas);
     }
-    public Formateur selectionner(List<Formateur> lf)
-    {
-        int nl = choixListe(lf);
-        Formateur formateur = lf.get(nl-1);
-        return formateur;
-    }
+
+
+
 }

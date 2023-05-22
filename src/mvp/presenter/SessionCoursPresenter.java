@@ -1,15 +1,33 @@
 package mvp.presenter;
 
-import mvp.model.DAOSessionCours;
-import mvp.view.SessionCoursViewInterface;
+import classesmetiers.Cours;
+import classesmetiers.Local;
+import classesmetiers.SessionCours;
+import mvp.model.DAO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import mvp.view.ViewInterface;
 
-public class SessionCoursPresenter {
-    private DAOSessionCours model;
+public class SessionCoursPresenter extends Presenter<SessionCours> implements SpecialSessionCoursPresenter {
 
-    private SessionCoursViewInterface view;
+    private Presenter<SessionCours> sessionCoursPresenter;
 
-    private static final Logger logger = LogManager.getLogger(SessionCoursPresenter.class);
+    private Presenter<Cours> coursPresenter;
+
+    private Presenter<Local> localPresenter;
+
+    public SessionCoursPresenter(DAO<SessionCours> model, ViewInterface<SessionCours> view)
+    {
+        super(model, view);
+    }
+
+    @Override
+    public Cours choixCours() {
+        return coursPresenter.selection();
+    }
+
+    @Override
+    public Local choixLocal()
+    {
+        return localPresenter.selection();
+    }
 }
