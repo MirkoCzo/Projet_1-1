@@ -2,10 +2,14 @@ package mvp.presenter;
 
 import mvp.model.DAO;
 import mvp.view.ViewInterface;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public abstract class Presenter<T> {
+
+
     protected DAO<T> model;
 
     protected ViewInterface<T> view;
