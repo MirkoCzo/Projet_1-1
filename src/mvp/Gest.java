@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import static Utilitaires.Utilitaires.*;
 
+
 public class Gest {
 
     private DAO<Cours> cm;

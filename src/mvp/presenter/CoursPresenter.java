@@ -1,14 +1,14 @@
 package mvp.presenter;
 
 import classesmetiers.*;
+import mvp.model.CoursModelDB;
 import mvp.model.DAO;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
-
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
 
 public class CoursPresenter extends Presenter<Cours> {
-    private static final Logger logger = (Logger) LogManager.getLogger(CoursPresenter.class);
+    private static final Logger logger = LogManager.getLogger(CoursPresenter.class);
 
     public CoursPresenter(DAO<Cours> model, ViewInterface<Cours> view)
     {
