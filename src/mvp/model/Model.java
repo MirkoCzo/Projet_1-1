@@ -1,4 +1,4 @@
-package mvp.model;
+/*package mvp.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,3 +44,4 @@ public abstract class Model<T> implements DAO<T>{
 
 
 }
+*/
