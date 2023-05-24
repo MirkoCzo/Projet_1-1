@@ -49,6 +49,13 @@ public abstract class Presenter<T> {
         if(nelt==null) view.affMsg("mise à jour infructueuse");
         else view.affMsg("mise à jour effectuée : "+nelt);
     }
+    public T read(T rech) {
+        T elt= model.read(rech);
+        if(elt==null) view.affMsg("recherche infructueuse");
+        else view.affMsg(elt.toString());
+
+        return elt;
+    }
 
     public void search(T rech)
     {

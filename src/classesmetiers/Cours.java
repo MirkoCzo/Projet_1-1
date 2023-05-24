@@ -50,6 +50,13 @@ public class Cours {
         this.heures = heures;
     }
 
+    private Cours(CoursBuilder builder)
+    {
+        this.id_cours = builder.id_cours;
+        this.matiere = builder.matière;
+        this.heures = builder.heures;
+    }
+
     @Override
     public String toString() {
         return "Cours{" +
@@ -147,5 +154,39 @@ public class Cours {
 
     public void setSessions(List<SessionCours> sessions) {
         this.sessions = sessions;
+    }
+
+    public static class CoursBuilder
+    {
+        protected int id_cours;
+
+        protected String matière;
+
+        protected int heures;
+
+        public CoursBuilder setIdCours(int id_cours)
+        {
+            this.id_cours = id_cours;
+            return this;
+        }
+
+        public CoursBuilder setMatière(String matière)
+        {
+            this.matière = matière;
+            return this;
+        }
+
+        public CoursBuilder setHeures(int heures)
+        {
+            this.heures = heures;
+            return this;
+        }
+
+        public Cours build() throws Exception
+        {
+            if(matière.isBlank() || heures <= 0) throw new Exception("Erreur lors de la construction du cours");
+            return new Cours(this);
+        }
+
     }
 }

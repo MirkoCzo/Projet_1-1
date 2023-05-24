@@ -59,6 +59,8 @@ public class Gest {
         scm = new SessionCoursModelDB();
         scv = new SessionCoursViewConsole();
         scp = new SessionCoursPresenter(scm,scv);
+        ((SpecialSessionCoursPresenter)scp).setLocalPresenter((LocalPresenter) lp);
+        ((SpecialSessionCoursPresenter)scp).setCoursPresenter((CoursPresenter)cp);
 
         List<String> loptions = Arrays.asList("Cours","Formateurs","Locaux","Session de cours","fin");
         do {

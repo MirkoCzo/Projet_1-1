@@ -110,7 +110,7 @@ public class LocalModelDB implements DAO<Local>
                 Local loc = new Local(local.getId_local(),sigle,places,desc);
                 return loc;
             }
-            else return null;
+            else System.out.println("Aucun local trouvé ");return null;
         } catch (SQLException e)
         {
             logger.error("Erreur SQL : "+e);

@@ -8,11 +8,11 @@ public interface ViewInterface<T> {
 
     public void setPresenter(Presenter<T> presenter);
 
-    public void setListDatas(List<T> datas);
+    public void setListDatas(List<T> ldatas);
 
     public void affMsg(String msg);
 
-    public void affList(List l);
+
 
     public T selectionner(List<T> l);
 }

@@ -30,39 +30,42 @@ public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecia
     }
     @Override
     public SessionCours add(SessionCours Sc) {
-        String query1 = "insert into APISESSIONCOURS (DATEDEBUT,DATEFIN,NBREINSCRIT,ID_LOCAL,ID_COURS) values (?,?,?,?,?)";
-        String query2 = "select ID_SESSIONCOURS from APISESSIONCOURS where ID_SESSIONCOURS = ?";
-        try(PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
-            PreparedStatement pstm2 = dbConnect.prepareStatement(query2);
-        ){
+        String query1 = "INSERT INTO APISESSIONCOURS (DATEDEBUT,DATEFIN,NBREINSCRITS,ID_LOCAL,ID_COURS) VALUES (?,?,?,?,?)";
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement(query1, Statement.RETURN_GENERATED_KEYS)) {
             pstm1.setDate(1, Date.valueOf(Sc.getDateDebut()));
-            pstm1.setDate(2,Date.valueOf(Sc.getDateFin()));
-            pstm1.setInt(3,Sc.getNbreInscrits());
-            pstm1.setInt(4,Sc.getLocal().getId_local());
-            pstm1.setInt(5,Sc.getCours().getId());
+            pstm1.setDate(2, Date.valueOf(Sc.getDateFin()));
+            pstm1.setInt(3, Sc.getNbreInscrits());
+            pstm1.setInt(4, Sc.getLocal().getId_local());
+            pstm1.setInt(5, Sc.getCours().getId());
             int n = pstm1.executeUpdate();
-            if(n==1)
-            {
-                pstm2.setInt(1,Sc.getId_sessionCours());
-                ResultSet rs = pstm2.executeQuery();
-                if(rs.next())
-                {
-                    int id_sess = rs.getInt(1);
-                    Sc.setId_sessionCours(id_sess);
-                    return Sc;
-                }
-                else
-                {
+            if (n == 1) {
+                ResultSet rs = pstm1.getGeneratedKeys();
+                if (rs.next()) {
+                    String rowId = rs.getString(1);
+                    Statement stmt = dbConnect.createStatement();
+                    ResultSet rs2 = stmt.executeQuery("SELECT ID_SESSIONCOURS FROM APISESSIONCOURS WHERE ROWID = '" + rowId + "'"); //J'ai du passer par la car getGeneratedKeys() me renvoyait le ROWID et pas la valeur de mon trigger et je ne peux pas passer par une deuxieme requete car je n'ai rien d'unique
+                    if (rs2.next()) {
+                        int id_sess = rs2.getInt(1);
+                        Sc.setId_sessionCours(id_sess);
+                        return Sc;
+                    } else {
+                        logger.error("record introuvable");
+                        return null;
+                    }
+                } else {
                     logger.error("record introuvable");
                     return null;
                 }
-            } else return null;
-        }catch (SQLException e)
-        {
-            logger.error("erreur sql : "+e);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            logger.error("erreur sql : " + e);
             return null;
         }
     }
+
+
 
     @Override
     public boolean remove(SessionCours Sc) {
@@ -82,7 +85,7 @@ public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecia
 
     @Override
     public SessionCours update(SessionCours sc) {
-        String query = "update APISESSIONCOURS set DATEDEBUT = ?, DATEFIN = ?, NBREINSCRITS = ?, ID_LOCAL = ?, ID_COURS = ?";
+        String query = "update APISESSIONCOURS set DATEDEBUT = ?, DATEFIN = ?, NBREINSCRITS = ?, ID_LOCAL = ?, ID_COURS = ? WHERE ID_SESSIONCOURS = ?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(query))
         {
             pstm.setDate(1,Date.valueOf(sc.getDateDebut()));
@@ -90,6 +93,7 @@ public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecia
             pstm.setInt(3,sc.getNbreInscrits());
             pstm.setInt(4,sc.getLocal().getId_local());
             pstm.setInt(5,sc.getCours().getId());
+            pstm.setInt(6,sc.getId_sessionCours());
             int n = pstm.executeUpdate();
             if(n!=0) return read(sc);
             else return null;
@@ -112,12 +116,15 @@ public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecia
                 LocalDate dated = rs.getDate(2).toLocalDate();
                 LocalDate datef = rs.getDate(3).toLocalDate();
                 int NBREI = rs.getInt(4);
-                Local loc = (Local) rs.getObject(5);
-                Cours cours = (Cours) rs.getObject(6);
-                SessionCours sc = new SessionCours(sess.getId_sessionCours(),dated,datef,NBREI, cours, loc);
+                int idloc = rs.getInt(5);
+                int idcours = rs.getInt(6);
+                Cours c = getCoursByID(idcours);
+                Local l = getLocalByID(idloc);
+                SessionCours sc = new SessionCours(sess.getId_sessionCours(),dated,datef,NBREI, c, l);
                 return sc;
             }
             else {
+                System.out.println("Aucune session trouvée");
                 return null;
             }
         }catch(SQLException e)

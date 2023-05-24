@@ -41,6 +41,16 @@ public class SessionCours {
      * Liste de toutes les infos lié à ce cours @see Infos
      */
     private List<Infos> infosList = new ArrayList<>();
+
+    private SessionCours(SessionCoursBuilder builder) {
+        this.id_sessionCours = builder.id_sessionCours;
+        this.cours = builder.cours;
+        this.local = builder.local;
+        this.dateDebut = builder.dateDebut;
+        this.dateFin = builder.dateFin;
+        this.nbreInscrits = builder.nbreInscrits;
+    }
+
     /**
      * méthode toString
      *
@@ -227,4 +237,49 @@ public class SessionCours {
     public int hashCode() {
         return Objects.hash(id_sessionCours);
     }
+
+    public static class SessionCoursBuilder {
+        protected int id_sessionCours;
+        protected LocalDate dateDebut;
+        protected LocalDate dateFin;
+        protected int nbreInscrits;
+        protected Cours cours;
+        protected Local local;
+
+        public SessionCoursBuilder setIdSessionCours(int idSessionCours) {
+            this.id_sessionCours = idSessionCours;
+            return this;
+        }
+
+        public SessionCoursBuilder setDateDebut(LocalDate dateDebut) {
+            this.dateDebut = dateDebut;
+            return this;
+        }
+
+        public SessionCoursBuilder setDateFin(LocalDate dateFin) {
+            this.dateFin = dateFin;
+            return this;
+        }
+
+        public SessionCoursBuilder setNbreInscrits(int nbreInscrits) {
+            this.nbreInscrits = nbreInscrits;
+            return this;
+        }
+
+        public SessionCoursBuilder setCours(Cours cours) {
+            this.cours = cours;
+            return this;
+        }
+
+        public SessionCoursBuilder setLocal(Local local) {
+            this.local = local;
+            return this;
+        }
+
+        public SessionCours build() throws Exception{
+            if (nbreInscrits<=0 || local == null || cours == null) throw new Exception("Erreur lors de la construction de la session de cours");
+            return new SessionCours(this);
+        }
+    }
+
 }

@@ -114,7 +114,7 @@ public class CoursModelDB implements DAO<Cours> {
                 Cours c = new Cours(cours.getId(),matière,heures);
                 return c;
             }
-            else return null;
+            else System.out.println("Aucun cours trouvé");return null;
         }
         catch(SQLException e)
         {

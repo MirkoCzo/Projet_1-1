@@ -47,6 +47,14 @@ public class Formateur {
         this.prenom = prenom;
     }
 
+    private Formateur(FormateurBuilder builder)
+    {
+        this.id_formateur = builder.id_formateur;
+        this.mail = builder.mail;
+        this.prenom = builder.prenom;
+        this.nom = builder.nom;
+    }
+
     /**
      * égalité de deux formateurs basé sur l'id et l'email
      * @param o autre element
@@ -142,5 +150,46 @@ public class Formateur {
      */
     public void setPrenom(String prenom) {
         this.prenom = prenom;
+    }
+
+    public static class FormateurBuilder
+    {
+        protected int id_formateur;
+
+        protected String mail;
+
+        protected String nom;
+
+        protected String prenom;
+
+        public FormateurBuilder setIdFormateur(int idFormateur)
+        {
+            this.id_formateur = idFormateur;
+            return this;
+        }
+
+        public FormateurBuilder setMail(String mail) {
+            this.mail = mail;
+            return this;
+        }
+
+        public FormateurBuilder setNom(String nom) {
+            this.nom = nom;
+            return this;
+        }
+
+        public FormateurBuilder setPrenom(String prenom) {
+            this.prenom = prenom;
+            return this;
+        }
+
+        public Formateur build() throws Exception {
+            if (mail.isBlank()) {
+                throw new Exception("Erreur lors de la construction du formateur : l'adresse e-mail est nulle");
+            }
+            return new Formateur(this);
+        }
+
+
     }
 }

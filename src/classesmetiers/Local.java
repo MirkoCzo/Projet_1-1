@@ -47,6 +47,14 @@ public class Local {
         this.description=description;
     }
 
+    private Local(LocalBuilder builder)
+    {
+        this.id_local = builder.id_local;
+        this.sigle = builder.sigle;
+        this.places = builder.places;
+        this.description = builder.description;
+    }
+
     /**
      * Getter
      * @return l'id du local
@@ -168,5 +176,43 @@ public class Local {
     @Override
     public int hashCode() {
         return Objects.hash(id_local);
+    }
+
+    public static class LocalBuilder{
+
+        protected int id_local;
+
+        protected String sigle;
+
+        protected int places;
+
+        protected String description;
+
+        public LocalBuilder setIdLocal(int idLocal)
+        {
+            this.id_local = idLocal;
+            return this;
+        }
+
+        public LocalBuilder setSigle(String sigle) {
+            this.sigle = sigle;
+            return this;
+        }
+
+        public LocalBuilder setPlaces(int places) {
+            this.places = places;
+            return this;
+        }
+
+        public LocalBuilder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Local build() throws Exception{
+            if(sigle==null || places <=0) throw new Exception("Erreur lors de la construction du local");
+            return new Local(this);
+        }
+
     }
 }

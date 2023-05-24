@@ -1,4 +1,4 @@
-package mvp.view;
+/*package mvp.view;
 
 import mvp.presenter.Presenter;
 
@@ -83,3 +83,4 @@ public abstract class View<T> implements ViewInterface<T> {
     protected  abstract void modifier();
     protected abstract  void ajouter();
 }
+*/

@@ -27,44 +27,45 @@ public class FormateurModelDB implements DAO<Formateur>{
 
 
     @Override
-    public Formateur add(Formateur formateur)
-    {
-        String query1 = "insert into APIFORMATEUR(MAIL,NOM,PRENOM) values(?,?,?)";
-        String query2 =  "select ID_FORMATEUR from APIFORMATEUR where mail = ?";
-        try(PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
-            PreparedStatement pstm2 = dbConnect.prepareStatement(query2);
-        ){
-            pstm1.setString(1,formateur.getMail());
-            pstm1.setString(2,formateur.getNom());
-            pstm1.setString(3,formateur.getPrenom());
+    public Formateur add(Formateur formateur) {
+        String query1 = "insert into APIFORMATEUR (MAIL, NOM, PRENOM) values (?, ?, ?)";
+        String query2 = "select ID_FORMATEUR from APIFORMATEUR where MAIL = ?";
+
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement(query1);
+             PreparedStatement pstm2 = dbConnect.prepareStatement(query2)) {
+
+            pstm1.setString(1, formateur.getMail());
+            pstm1.setString(2, formateur.getNom());
+            pstm1.setString(3, formateur.getPrenom());
+
             int n = pstm1.executeUpdate();
-            if(n==1)
-            {
-                pstm2.setString(1,formateur.getMail());
+
+            if (n == 1) {
+                pstm2.setString(1, formateur.getMail());
                 ResultSet rs = pstm2.executeQuery();
-                if(rs.next())
-                {
-                    int idform = rs.getInt(1);
-                    formateur.setId_formateur(idform);
+
+                if (rs.next()) {
+                    int idFormateur = rs.getInt(1);
+                    formateur.setId_formateur(idFormateur);
                     return formateur;
-                }
-                else {
+                } else {
                     logger.error("Record introuvable");
                     return null;
                 }
+            } else {
+                return null;
             }
-            else return null;
-        }catch (SQLException e )
-        {
-            logger.error("Erreur sql : "+e);
+        } catch (SQLException e) {
+            logger.error("Erreur SQL : " + e);
             return null;
         }
-
     }
+
+
     @Override
     public boolean remove(Formateur formateur)
     {
-        String query = "delete from APICOURS where ID_FORMATEUR = ?";
+        String query = "delete from APIFORMATEUR where ID_FORMATEUR = ?";
         try(PreparedStatement pstm = dbConnect.prepareStatement(query))
         {
             pstm.setInt(1,formateur.getId_formateur());
@@ -88,6 +89,7 @@ public class FormateurModelDB implements DAO<Formateur>{
             pstm.setString(1, formateur.getMail());
             pstm.setString(2, formateur.getNom());
             pstm.setString(3, formateur.getPrenom());
+            pstm.setInt(4,formateur.getId_formateur());
             int n = pstm.executeUpdate();
             if(n!=0) return read(formateur);
             else return null;
@@ -117,6 +119,7 @@ public class FormateurModelDB implements DAO<Formateur>{
             }
             else
             {
+                System.out.println("Aucun formateur trouvé");
                 return null;
             }
         }

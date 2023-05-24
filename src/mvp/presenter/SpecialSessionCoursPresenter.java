@@ -3,9 +3,15 @@ package mvp.presenter;
 import classesmetiers.Cours;
 import classesmetiers.Local;
 
+import java.util.List;
+
 public interface SpecialSessionCoursPresenter {
 
-    Cours choixCours();
+    List<Cours> choixCours();
 
-    Local choixLocal();
+    List<Local> choixLocal();
+
+    void setCoursPresenter(CoursPresenter coursPresenter);
+
+    void setLocalPresenter(LocalPresenter localPresenter);
 }

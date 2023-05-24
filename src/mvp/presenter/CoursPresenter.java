@@ -13,6 +13,7 @@ public class CoursPresenter extends Presenter<Cours> {
     public CoursPresenter(DAO<Cours> model, ViewInterface<Cours> view)
     {
         super(model, view);
+        this.view.setPresenter(this);
     }
 
 }
