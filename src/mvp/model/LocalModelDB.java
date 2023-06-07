@@ -2,16 +2,18 @@ package mvp.model;
 
 import classesmetiers.*;
 import myconnections.DBconnection;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.sql.*;
 import java.util.ArrayList;
 
 
-public class LocalModelDB implements DAO<Local>
+public class LocalModelDB implements DAO<Local>,LocalSpecial
 {
     private static final Logger logger = LogManager.getLogger(LocalModelDB.class);
     protected Connection dbConnect;
@@ -141,4 +143,39 @@ public class LocalModelDB implements DAO<Local>
             return null;
         }
     }
+
+    @Override
+    public List<Local> getAvailableLocaux(LocalDate dateDebut, LocalDate dateFin, int capacite) {
+        List<Local> localList = new ArrayList<>();
+        boolean find=false;
+        try(CallableStatement cs = dbConnect.prepareCall("{?=call GET_AVAILABLE_LOCAUX(?, ?, ?)}"))
+        {
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.setDate(2, Date.valueOf(dateDebut));
+            cs.setDate(3, Date.valueOf(dateFin));
+            cs.setInt(4, capacite);
+            cs.executeQuery();
+            ResultSet rs = (ResultSet) cs.getObject(1);
+            while (rs.next())
+            {
+                int id = rs.getInt("ID_LOCAL");
+                String sigle = rs.getString("SIGLE");
+                int places = rs.getInt("PLACES");
+                String description = rs.getString("DESCRIPTION");
+                Local l = new Local(id, sigle, places, description);
+                localList.add(l);
+                System.out.println("ID Local: "+id+" Sigle: "+sigle+" Places: "+places+" Description: "+description);
+                find=true;
+            }
+            if (!find)
+            {
+                System.out.println("Aucun local trouvé");
+            }
+        }catch(Exception e)
+        {
+            System.out.println("Erreur "+e);
+        }
+        return localList;
+    }
+
 }

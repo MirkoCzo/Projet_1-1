@@ -2,7 +2,10 @@ package mvp.model;
 
 import classesmetiers.Cours;
 import classesmetiers.Local;
+import mvp.presenter.Presenter;
+import mvp.presenter.SessionCoursPresenter;
 import myconnections.DBconnection;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,10 +16,16 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
+import static Utilitaires.Utilitaires.affListe;
+import static Utilitaires.Utilitaires.choixElt;
 
 public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecial{
     private static final Logger logger = LogManager.getLogger(SessionCoursModelDB.class);
     protected Connection dbConnect;
+
+
 
     public SessionCoursModelDB()
     {
@@ -214,4 +223,24 @@ public class SessionCoursModelDB implements DAO<SessionCours>,SessionCoursSpecia
             return null;
         }
     }
+    public int addSession(SessionCours sc) {
+        int ID_SESS = -1;
+        try (CallableStatement cs = dbConnect.prepareCall("{call NewSession(?,?,?,?,?,?)}")) {
+            cs.setDate(2, Date.valueOf(sc.getDateDebut()));
+            cs.setDate(3, Date.valueOf(sc.getDateFin()));
+            cs.setInt(4, sc.getNbreInscrits());
+            cs.setInt(5, sc.getLocal().getId_local());
+            cs.setInt(6, sc.getCours().getId());
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.executeQuery();
+            ID_SESS = cs.getInt(1);
+            System.out.println("Id de la session = " + ID_SESS);
+        } catch (SQLException x) {
+            System.out.println("Erreur SQL " + x);
+        }
+        return ID_SESS;
+    }
+    
+
+
 }

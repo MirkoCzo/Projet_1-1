@@ -61,6 +61,7 @@ public class Gest {
         scp = new SessionCoursPresenter(scm,scv);
         ((SpecialSessionCoursPresenter)scp).setLocalPresenter((LocalPresenter) lp);
         ((SpecialSessionCoursPresenter)scp).setCoursPresenter((CoursPresenter)cp);
+        ((FormateurPresenterSpecial)fp).setSessionCoursPresenter((SessionCoursPresenter)scp);
 
         List<String> loptions = Arrays.asList("Cours","Formateurs","Locaux","Session de cours","fin");
         do {

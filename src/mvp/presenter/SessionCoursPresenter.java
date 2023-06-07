@@ -3,9 +3,9 @@ package mvp.presenter;
 import classesmetiers.Cours;
 import classesmetiers.Local;
 import classesmetiers.SessionCours;
-import mvp.model.CoursModelDB;
 import mvp.model.DAO;
 
+import mvp.model.SessionCoursSpecial;
 import mvp.view.ViewInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,6 +38,8 @@ public class SessionCoursPresenter extends Presenter<SessionCours> implements Sp
         return lLocal;
     }
 
+
+
     @Override
     public void setCoursPresenter(CoursPresenter coursPresenter) {
         this.coursPresenter = coursPresenter;
@@ -47,4 +49,14 @@ public class SessionCoursPresenter extends Presenter<SessionCours> implements Sp
     public void setLocalPresenter(LocalPresenter localPresenter) {
         this.localPresenter = localPresenter;
     }
+
+    @Override
+    public int addSession(SessionCours sc)
+    {
+        int ID_SESS;
+        ID_SESS = ((SessionCoursSpecial)model).addSession(sc);
+        return ID_SESS;
+    }
+
+
 }

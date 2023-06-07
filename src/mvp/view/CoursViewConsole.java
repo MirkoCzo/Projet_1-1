@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 
 import mvp.model.CoursModelDB;
+import mvp.presenter.CoursSpecialPresenter;
 import mvp.presenter.Presenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -69,7 +70,7 @@ public class CoursViewConsole implements ViewInterface<Cours>{
         affListe(ldatas);
     }
     public void menu(){
-        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les cours","Ajouter un cours","Modifier un cours","Effacer un cours","Rechercher un cours","Retour"));
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les cours","Ajouter un cours","Modifier un cours","Effacer un cours","Rechercher un cours","Speciales","Retour"));
 
         int choix;
 
@@ -82,10 +83,29 @@ public class CoursViewConsole implements ViewInterface<Cours>{
                 case 3 : modifier();break;
                 case 4 : retirer();break;
                 case 5 : rechercher();break;
-                case 6 :
+                case 6 : special();break;
+                case 7 :
                     System.out.println("Fin");
             }
-        }while(choix!=6);
+        }while(choix!=7);
+    }
+
+    public void special()
+    {
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les cours","Ajouter un nouveau cours","retour"));
+        int choix;
+        do {
+            affListe(loptions);
+            choix=choixElt(loptions);
+            switch (choix)
+            {
+                case 1:getAllCours();break;
+                case 2:insert_new_cours();break;
+                case 3:
+                    System.out.println("fin");
+            }
+
+        }while(choix!=2);
     }
 
     protected void retirer()
@@ -96,6 +116,20 @@ public class CoursViewConsole implements ViewInterface<Cours>{
         presenter.remove(cours);
         ldatas=presenter.getAll();
         affListe(ldatas);
+    }
+
+    public void getAllCours()
+    {
+        List<Cours> list;
+        list = ((CoursSpecialPresenter)presenter).getAllCours();
+        //Bonus
+    }
+
+    public int insert_new_cours()
+    {
+        int PK;
+        PK = ((CoursSpecialPresenter)presenter).insert_new_cours();
+        return PK;
     }
 
 

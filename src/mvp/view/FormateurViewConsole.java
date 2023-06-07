@@ -1,6 +1,7 @@
 package mvp.view;
 
 import classesmetiers.Formateur;
+import classesmetiers.SessionCours;
 import mvp.presenter.FormateurPresenter;
 import mvp.presenter.Presenter;
 
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import mvp.presenter.SessionCoursPresenter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import static Utilitaires.Utilitaires.*;
@@ -105,7 +108,7 @@ public class FormateurViewConsole implements ViewInterface<Formateur>{
 
 
     public void menu(){
-        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les formateurs","Ajouter un formateur","Modifier un formateur","Effacer un formateur","Rechercher un formateur","Retour"));
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les formateurs","Ajouter un formateur","Modifier un formateur","Effacer un formateur","Rechercher un formateur","Speciales","Retour"));
         int choix;
 
         do{
@@ -117,17 +120,38 @@ public class FormateurViewConsole implements ViewInterface<Formateur>{
                 case 3 : modifier();break;
                 case 4 : retirer();break;
                 case 5 : rechercher();break;
-                case 6 :
+                case 6 : special();break;
+                case 7 :
                     System.out.println("Fin");
             }
-        }while(choix!=6);
+        }while(choix!=7);
     }
 
+    public void special()
+    {
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher le nombre total d'heures qu'ont effectué les formateurs pour une session donnée","retour"));
+        int choix;
+        do {
+            affListe(loptions);
+            choix=choixElt(loptions);
+            switch (choix)
+            {
+                case 1:afficheHeures();break;
+                case 2:
+                    System.out.println("fin");
+            }
+
+        }while(choix!=2);
+    }
 
     @Override
     public void setPresenter(Presenter<Formateur> presenter) {
         this.presenter = (FormateurPresenter) presenter;
     }
+
+
+
+
 
     @Override
     public void setListDatas(List<Formateur> ldatas) {
@@ -149,5 +173,18 @@ public class FormateurViewConsole implements ViewInterface<Formateur>{
         Formateur f = l.get(choix-1);
 
         return f;
+    }
+
+    public void afficheHeures()
+    {
+        int choix;
+        SessionCours sess;
+        List<SessionCours> lSess = new ArrayList<>();
+        lSess = ((FormateurPresenter)presenter).lSessionCours();
+        affListe(lSess);
+        choix=choixElt(lSess);
+        sess=lSess.get(choix-1);
+        ((FormateurPresenter)presenter).getTotalFormateurHeures(sess.getId_sessionCours());
+
     }
 }

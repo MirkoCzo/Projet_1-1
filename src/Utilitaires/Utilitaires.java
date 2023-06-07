@@ -15,6 +15,8 @@ public class Utilitaires {
         int a = Integer.parseInt(jma[2]);
         return LocalDate.of(a,m,j);
     }
+
+
     public static int choixListe(List l){
         affListe(l);
         return choixElt(l);

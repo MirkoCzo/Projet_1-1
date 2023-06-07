@@ -3,8 +3,10 @@ package mvp.view;
 import classesmetiers.Cours;
 import classesmetiers.Local;
 import mvp.presenter.LocalPresenter;
+import mvp.presenter.LocalSpecialPresenter;
 import mvp.presenter.Presenter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +102,7 @@ public class LocalViewConsole implements ViewInterface<Local> {
 
 
     public void menu(){
-        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les Locaux","Ajouter un local","Modifier un local","Effacer un local","Rechercher un local","Retour"));
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher tous les Locaux","Ajouter un local","Modifier un local","Effacer un local","Rechercher un local","Speciales","Retour"));
         int choix;
 
         do{
@@ -112,10 +114,41 @@ public class LocalViewConsole implements ViewInterface<Local> {
                 case 3 : modifier();break;
                 case 4 : retirer();break;
                 case 5 : rechercher();break;
-                case 6 :
+                case 6 : special();break;
+                case 7 :
                     System.out.println("Fin");
             }
-        }while(choix!=6);
+        }while(choix!=7);
+    }
+    public void special()
+    {
+        List<String> loptions = new ArrayList<>(Arrays.asList("Afficher les locaux disponible entre deux dates","retour"));
+        int choix;
+        do {
+            affListe(loptions);
+            choix=choixElt(loptions);
+            switch (choix)
+            {
+                case 1:creaSpecial();break;
+                case 2:
+                    System.out.println("fin");
+            }
+
+        }while(choix!=2);
+    }
+
+    protected void creaSpecial()
+    {
+        LocalDate DateDebut,DateFin;
+        int Places;
+        System.out.println("Date debut");
+        DateDebut=lectureDate();
+        System.out.println("Date fin");
+        DateFin=lectureDate();
+        System.out.println("Places necessaires?");
+        Places = sc.nextInt();
+        List<Local> list = ((LocalSpecialPresenter)presenter).getAvailableLocaux(DateDebut,DateFin,Places);
+
     }
 
 

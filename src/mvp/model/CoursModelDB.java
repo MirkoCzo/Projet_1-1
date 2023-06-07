@@ -2,14 +2,19 @@ package mvp.model;
 
 import classesmetiers.Cours;
 import myconnections.DBconnection;
+import oracle.jdbc.OracleType;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class CoursModelDB implements DAO<Cours> {
+public class CoursModelDB implements DAO<Cours>,CoursSpecial {
+
+
     private static final Logger logger = LogManager.getLogger(CoursModelDB.class);
     protected Connection dbConnect;
 
@@ -148,5 +153,57 @@ public class CoursModelDB implements DAO<Cours> {
         }
     }
 
+
+    @Override
+    public List<Cours> getAllCours() { //BONUS
+        List<Cours> coursList = new ArrayList<>();
+        try(CallableStatement cs = dbConnect.prepareCall("{?=call get_all_cours}"))
+        {
+            cs.registerOutParameter(1, OracleTypes.CURSOR);
+            cs.executeQuery();
+            ResultSet rs = (ResultSet) cs.getObject(1);
+            while (rs.next())
+            {
+                int id = rs.getInt(1);
+                String mat = rs.getString(2);
+                int heures = rs.getInt(3);
+                Cours c = new Cours(id,mat,heures);
+                coursList.add(c);
+                System.out.println("Id du cours "+id+" matière "+mat+" heures "+heures);
+            }
+        }catch(Exception e)
+        {
+            System.out.println("Erreur "+e);
+        }
+        return coursList;
+    }
+
+    @Override
+    public int insert_new_cours() {
+        int PK = -1;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Nouveau cours");
+
+        System.out.println("Matière? ");
+        String mat = sc.nextLine();
+
+        System.out.println("Heures?");
+        int heures = sc.nextInt();
+
+        try (CallableStatement cs = dbConnect.prepareCall("{? = call insert_new_cours(?, ?)}")) {
+            cs.registerOutParameter(1, OracleTypes.INTEGER);
+            cs.setString(2, mat);
+            cs.setInt(3, heures);
+            cs.execute();
+            PK = cs.getInt(1);
+        } catch (SQLException e) {
+            System.out.println("ERREUR SQL =" + e);
+        }
+        if (PK!=-1)
+        {
+            System.out.println("La PK est égale à "+PK);
+        }
+        return PK;
+    }
 
 }

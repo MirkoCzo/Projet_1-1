@@ -2,6 +2,7 @@ package mvp.model;
 
 import classesmetiers.Formateur;
 import myconnections.DBconnection;
+import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FormateurModelDB implements DAO<Formateur>{
+public class FormateurModelDB implements DAO<Formateur>,FormateurSpecial{
     private static final Logger logger = LogManager.getLogger(FormateurModelDB.class);
     protected Connection dbConnect;
 
@@ -153,5 +154,24 @@ public class FormateurModelDB implements DAO<Formateur>{
             logger.error("Erreur SQL : "+e);
             return null;
         }
+
     }
+
+    @Override
+    public int getTotalFormateurHeures(int idSessionCours) {
+        int totalHeures = 0;
+        try(CallableStatement cs = dbConnect.prepareCall("{?=call GET_TOTAL_FORMATEUR_HEURES(?)}"))
+        {
+            cs.registerOutParameter(1, OracleTypes.NUMBER);
+            cs.setInt(2, idSessionCours);
+            cs.executeQuery();
+            totalHeures = cs.getInt(1);
+            System.out.println("Total des heures de formateur pour la session " + idSessionCours + ": " + totalHeures);
+        }catch(Exception e)
+        {
+            System.out.println("Erreur "+e);
+        }
+        return totalHeures;
+    }
+
 }

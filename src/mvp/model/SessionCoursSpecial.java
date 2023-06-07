@@ -2,11 +2,9 @@ package mvp.model;
 
 import classesmetiers.Cours;
 import classesmetiers.Local;
+import classesmetiers.SessionCours;
 
-
-import java.sql.*;
-
-
+import java.util.List;
 
 
 public interface SessionCoursSpecial {
@@ -15,4 +13,6 @@ public interface SessionCoursSpecial {
 
     public Cours getCoursByID(int id);
 
+
+    int addSession(SessionCours sc);
 }
